@@ -45,8 +45,8 @@ h2 { margin-top: 0; color: #164a68;}
 </div>
 <script>
 const parents = {
-    sickle: ['S','s'], // Parent is heterozygous for sickle cell
-    regular: ['A','a'] // Parent is heterozygous for neutral trait
+    sickle: ['S','s'], 
+    regular: ['A','a'] 
 };
 
 function renderChromosome(alleles) {
@@ -75,8 +75,16 @@ function startMitosis() {
 }
 
 function startMeiosis() {
-    document.getElementById('fertilization-panel').style.display = '';
-    let meiosisGametogenesis = ['S','A'], ['S','a'], ['s','A'], ['s','a'];
+    document.getElementById('fertilization-panel').style.display = 'block';
+
+    // FIXED: Correct array declaration
+    let meiosisGametogenesis = [
+        ['S','A'],
+        ['S','a'],
+        ['s','A'],
+        ['s','a']
+    ];
+
     let output = `<h2>Meiosis - Gamete Formation</h2>
         <p>Parent cell:</p>
         ${renderChromosome(parents.sickle)} ${renderChromosome(parents.regular)}
@@ -85,13 +93,13 @@ function startMeiosis() {
         <div class="cell"><div class="allele S">S</div><div class="allele a">a</div></div>
         <div class="cell"><div class="allele s">s</div><div class="allele A">A</div></div>
         <div class="cell"><div class="allele s">s</div><div class="allele a">a</div></div>
-        <p>Each gamete has only <strong>one allele per gene</strong>, and combinations are random (Law of Segregation & Independent Assortment).</p>`;
+        <p>Each gamete has only <strong>one allele per gene</strong> (Segregation), and combinations are random (Independent Assortment).</p>`;
+    
     document.getElementById('simulation').innerHTML = output;
     document.getElementById('zygote-list').innerHTML = '';
 }
 
 function simulateFertilization() {
-    // Randomly generate 10 zygotes by pairing sperm and egg from all possible gametes
     let gametes = [
         { sickle:'S', regular:'A' },
         { sickle:'S', regular:'a' },
@@ -101,14 +109,4 @@ function simulateFertilization() {
     let zygotesHTML = '';
     for(let i=0; i<10; i++) {
         let sperm = gametes[Math.floor(Math.random()*4)];
-        let egg = gametes[Math.floor(Math.random()*4)];
-        zygotesHTML += `<div class="zygote">
-            Sickle: ${sperm.sickle}${egg.sickle}
-            , Neutral: ${sperm.regular}${egg.regular}
-        </div>`;
-    }
-    document.getElementById('zygote-list').innerHTML = zygotesHTML;
-}
-</script>
-</body>
-</html>
+        let egg = gametes[Math.floor(Mat]()
