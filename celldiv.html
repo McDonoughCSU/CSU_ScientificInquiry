@@ -1,97 +1,108 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>Genetics Cell Division Simulator</title>
-<style>
-body { font-family: Arial, sans-serif; background: #f3f7fa; margin: 0; padding: 0;}
-#container { width: 90%; margin: 0 auto; padding: 20px;}
-.section { background: #fff; border-radius: 8px; margin-bottom: 20px; padding: 20px;}
-h2 { margin-top: 0; color: #164a68;}
-.chromosome { display: inline-block; margin: 0 10px; vertical-align: middle;}
-.allele { width: 36px; height: 36px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-weight: bold;}
-.S { background: #90ee90; }
-.s { background: #f88379; }
-.A { background: #9ec1cf; }
-.a { background: #fff285; }
-.cell { display: inline-block; margin: 8px; text-align: center;}
-#simulation { display: block; }
-.btn { padding: 8px 18px; border: none; border-radius: 6px; background: #528aad; color: #fff; font-weight: bold; cursor: pointer;}
-#zygote-list { margin-top: 12px; display: flex; flex-wrap: wrap;}
-.zygote { font-size: 1.1em; margin: 7px; display: inline-block; padding: 6px 9px; border-radius: 5px; background: #c9eaf3; }
-</style>
-</head>
-<body>
-<div id="container">
-    <h1>Cell Division & Genetics Simulator</h1>
-
-    <div class="section">
-        <h2>Select Mode</h2>
-        <button class="btn" onclick="startMitosis()">Mitosis</button>
-        <button class="btn" onclick="startMeiosis()">Meiosis</button>
-    </div>
-
-    <div class="section" id="simulation"></div>
-
-    <div class="section" id="fertilization-panel" style="display:none;">
-        <h2>Random Fertilization (Meiosis Only)</h2>
-        <button class="btn" onclick="simulateFertilization()">Simulate 10 Zygotes</button>
-        <div id="zygote-list"></div>
-    </div>
-
-    <div class="section">
-        <h2>Mendelian Genetics Explained</h2>
-        <ul>
-            <li><strong>Law of Segregation:</strong> Each gamete gets only one allele for each gene during meiosis.</li>
-            <li><strong>Law of Independent Assortment:</strong> Alleles for different genes sort independently.</li>
-        </ul>
-    </div>
-</div>
-
 <script>
-const parents = {
-    sickle: ['S','s'],
-    regular: ['A','a']
-};
-
-function renderChromosome(alleles) {
-    return `<div class="chromosome">
-      <div class="allele ${alleles[0]}">${alleles[0]}</div>
-      &nbsp;-&nbsp;
-      <div class="allele ${alleles[1]}">${alleles[1]}</div>
-    </div>`;
-}
-
-function renderGamete(alleles) {
-    return `<div class="cell">
-        <div class="allele ${alleles[0]}">${alleles[0]}</div>
-        <div class="allele ${alleles[1]}">${alleles[1]}</div>
-    </div>`;
-}
-
 function startMitosis() {
-    document.getElementById('fertilization-panel').style.display = 'none';
+    // Full-page replacement
+    document.body.innerHTML = `
+    <div id="container">
+        <h1>Mitosis Simulation</h1>
+        <div class="section">
+            <h2>Mitosis - Somatic Cell Division</h2>
 
-    let output = `
-        <h2>Mitosis - Somatic Cell Division</h2>
-        <p>Parent cell:</p>
-        ${renderChromosome(parents.sickle)} ${renderChromosome(parents.regular)}
+            <p>Parent cell:</p>
+            ${renderChromosome(parents.sickle)} ${renderChromosome(parents.regular)}
 
-        <p>DNA replicates; chromosomes align and split:</p>
-        <div style="display:flex; align-items:center;">
-            <div class="cell">
-                ${renderChromosome(['S','s'])} ${renderChromosome(['A','a'])}
+            <p>DNA replicates; chromosomes align and split:</p>
+            <div style="display:flex; align-items:center;">
+                <div class="cell">
+                    ${renderChromosome(['S','s'])} ${renderChromosome(['A','a'])}
+                </div>
+                <span style="font-size:2em; margin: 0 10px;">&#10141;</span>
+                <div class="cell">
+                    ${renderChromosome(['S','s'])} ${renderChromosome(['A','a'])}
+                </div>
             </div>
-            <span style="font-size:2em; margin: 0 10px;">&#10141;</span>
-            <div class="cell">
-                ${renderChromosome(['S','s'])} ${renderChromosome(['A','a'])}
-            </div>
+
+            <p>Each daughter cell receives <strong>both</strong> alleles for each gene.</p>
+
+            <button class="btn" onclick="location.reload()">Back to Main Menu</button>
         </div>
-
-        <p>Each daughter cell receives <strong>both</strong> alleles for each gene.</p>`;
-
-    document.getElementById('simulation').innerHTML = output;
+    </div>`;
 }
+
 
 function startMeiosis() {
-    document.getEl
+    // Full-page replacement
+    let gametes = [
+        ['S','A'],
+        ['S','a'],
+        ['s','A'],
+        ['s','a']
+    ];
+
+    let gameteHTML = gametes.map(g => `
+        <div class="cell">
+            <div class="allele ${g[0]}">${g[0]}</div>
+            <div class="allele ${g[1]}">${g[1]}</div>
+        </div>
+    `).join('');
+
+    document.body.innerHTML = `
+    <div id="container">
+        <h1>Meiosis Simulation</h1>
+        <div class="section">
+            <h2>Meiosis - Gamete Formation</h2>
+
+            <p>Parent cell:</p>
+            ${renderChromosome(parents.sickle)} ${renderChromosome(parents.regular)}
+
+            <p>After meiosis, possible gametes:</p>
+            <div style="display:flex; flex-wrap:wrap;">${gameteHTML}</div>
+
+            <p>Each gamete has only <strong>one allele per gene</strong>, randomly assorted.</p>
+
+            <button class="btn" onclick="simulateFertilizationPage()">Simulate Fertilization</button>
+            <button class="btn" onclick="location.reload()">Back to Main Menu</button>
+        </div>
+    </div>`;
+}
+
+
+// New helper to show fertilization on a full page
+function simulateFertilizationPage() {
+    let gametes = [
+        { sickle:'S', regular:'A' },
+        { sickle:'S', regular:'a' },
+        { sickle:'s', regular:'A' },
+        { sickle:'s', regular:'a' }
+    ];
+
+    let zygotesHTML = "";
+
+    for (let i = 0; i < 10; i++) {
+        let sperm = gametes[Math.floor(Math.random() * 4)];
+        let egg = gametes[Math.floor(Math.random() * 4)];
+        zygotesHTML += `
+            <div class="zygote">
+                Sickle: ${sperm.sickle}${egg.sickle} |
+                Neutral: ${sperm.regular}${egg.regular}
+            </div>
+        `;
+    }
+
+    document.body.innerHTML = `
+    <div id="container">
+        <h1>Random Fertilization</h1>
+        <div class="section">
+            <h2>10 Random Zygotes</h2>
+
+            <div style="display:flex; flex-wrap:wrap;">
+                ${zygotesHTML}
+            </div>
+
+            <button class="btn" onclick="simulateFertilizationPage()">Generate Again</button>
+            <button class="btn" onclick="startMeiosis()">Back to Meiosis</button>
+            <button class="btn" onclick="location.reload()">Main Menu</button>
+        </div>
+    </div>`;
+}
+</script>
+
